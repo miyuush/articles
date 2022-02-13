@@ -1,0 +1,26 @@
+name: textlint
+
+on:
+  push:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  textlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        # textlintを使用するためにnode.jsの設定を行う
+      - uses: actions/setup-node@v2
+
+      - name: Install textlint
+        run: >
+          npm install --save-dev
+          textlint
+          textlint-rule-preset-ja-technical-writing 
+      
+      - name: Install dependent module
+        run: npm install
+      
+      - name: Execute textlint
+        run: npx textlint "articles/**/*.md"

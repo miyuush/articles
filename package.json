@@ -1,0 +1,24 @@
+{
+  "name": "articles",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "textlint": "^12.1.0",
+    "textlint-rule-preset-ja-technical-writing": "^7.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miyuush/articles.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miyuush/articles/issues"
+  },
+  "homepage": "https://github.com/miyuush/articles#readme"
+}
