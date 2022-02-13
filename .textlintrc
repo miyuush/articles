@@ -6,6 +6,10 @@
             },
             "no-exclamation-question-mark": false,
             "ja-no-weak-phrase": false,
+        },
+        "preset-ja-spacing": true,
+        "@proofdict/proofdict": {
+          "dictURL": "https://azu.github.io/proof-dictionary/"
         }
     }
 } 

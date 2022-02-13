@@ -7,7 +7,7 @@
 - [GoogleAppsScript](https://developers.google.com/gsuite/aspects/appsscript?hl=ja)(GAS)：「いいね！」したツイートの情報をSpreadsheetに取得してSlackに通知するため
 - [Slack Incoming Webhook](https://api.slack.com/messaging/webhooks)：GASからSlackにメッセージを送信するため
 
-※ツイートに別ページへのリンクが含まれていない場合にもslackに投稿されたり、別ページのリンクが含まれている場合にもそのツイート自体のリンクが投稿されることがあります。~~後述するようにAPIから取得したデータで判断しているのですが、適切な判断項目を発見できていないのでご存知の方がいたらコメントにて教えていただけると幸いです~~
+※ツイートに別ページへのリンクが含まれているかに関わらず、slackに投稿されることがあります。~~後述するようにAPIから取得したデータで判断しているのですが、適切な判断項目を発見できていないのでご存知の方がいたらコメントにて教えていただけると幸いです~~
 
 # 処理の大まかな流れ
 1. Twitterで「いいね！」をする
@@ -25,7 +25,7 @@
 本記事の実装を再現するだけならこのサイトの[第3回](https://excel-ubara.com/apps_script1/GAS003.html)までを理解できていれば良いです。
 
 ## Twitter APIのキーを取得
-次に、Twitter APIの申請を行ってAPIキーを取得する必要があります。
+次に、Twitter APIを申請してAPIキーを取得する必要があります。
 私は以下の記事を参考に行いました。
 　[2020年度版 Twitter API利用申請の例文からAPIキーの取得まで詳しく解説](https://www.itti.jp/web-direction/how-to-apply-for-twitter-api/)
 
@@ -193,7 +193,7 @@ function getArray(lastRow, sheet) {
 }
 ```
 
-**初めてGASからTwitter APIの機能を利用する場合は、Twitterの認証を行う必要があります。**
+**初めてGASからTwitter APIの機能を利用する場合は、Twitterの認証をする必要があります。**
 そのため、以下の記事を参考に`authorize()`を実行して、ログに出力されているURLにアクセスして認証します。
 　[Google Apps Script (GAS) でTwitterへ投稿するだけの機能を実装してみる](https://qiita.com/akkey2475/items/ad190a507b4a7b7dc17c#twitter%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E8%AA%8D%E8%A8%BC%E3%82%92%E8%A1%8C%E3%81%86)
 
@@ -201,7 +201,7 @@ function getArray(lastRow, sheet) {
 GASスクリプトエディタ→ツールバーの「実行」→「Chrome V8を搭載した新しいApps Scriptランタイムを無効にする」で無効にしてから実行します。
 
 上記のスクリプトを簡単に説明します。`getMyFavorites()`を実行すると「いいね！」した最新の100ツイートを取得して、各ツイートに対して別ページへのリンクが含まれているかを判断します。リンクが含まれている場合、`SearchUrl()`を呼び出して既にリンクがSpreadsheetに保存されているかを判断します。Spreadsheetに保存されていなければそのツイート情報を追記します。
-~~`extractUrl()`は試行錯誤的にURLを抽出している感がすごいので、JavaScriptの学習をする気になったらきれいにしたいです。~~
+~~`extractUrl()`は試行錯誤的にURLを抽出している感がすごいので、JavaScriptを学習したらもう少しきれいにしたいです。~~
 
 ```javascript
 
@@ -275,7 +275,7 @@ GASでは、スクリプトを自動で実行するようにトリガーを設�
 `postSheetChange関数`はSpreadsheetに行が追加された時に呼び出されるように設定したかったのですが、GASを用いてSpreadsheetに書き込んだ場合はトリガーが反応しない（？）ため時間主導型に設定しました。
 
 # 実装結果
-最後に、ここまでの手順に従って実装した場合にSpreadsheetに保存されるデータとSlackに投稿されるURLの例を示します。
+最後に、ここまでの手順に従って実装するとSpreadsheetに保存されるデータとSlackへ投稿されるURLの例を示します。
 
 まず、`getMyFavorites関数`がトリガーで呼び出されるとSpreadsheetに「いいね！」した別ページへのリンクを含むツイートの情報が保存されます。
 ![Spreadsheet_first.PNG](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/642820/86dbac7f-dac7-65d5-19c7-66f0b1f7dbd9.png)
