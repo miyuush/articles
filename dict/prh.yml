@@ -4,7 +4,21 @@ rules:
   - expected: よい
     pattern: /いい(?!ね)/
     specs:
-      - from: いい天気
-        to: よい天気
+      - from: いい
+        to: よい
       - from: いいね
         to: いいね
+  - expected: 始め
+    pattern: /はじめ(?!に)/
+    specs:
+      - from: はじめる
+        to: 始める
+      - from: はじめに
+        to: はじめに
+  - expected: 終わり
+    pattern: /おわり(?!に)/
+    specs:
+      - from: おわります
+        to: 終わります
+      - from: おわりに
+        to: おわりに

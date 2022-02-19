@@ -8,6 +8,8 @@
         #     "ja-no-weak-phrase": false,
         # },
         "preset-smarthr": {
+            "ja-no-mixed-period": false,
+            "@textlint-rule/no-unmatched-pair": false,
             "sentence-length": {
                 max: 150
             }
@@ -19,4 +21,4 @@
             ]
         }
     }
-} 
+}
