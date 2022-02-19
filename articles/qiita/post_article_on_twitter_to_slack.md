@@ -1,30 +1,35 @@
 本記事では、Twitterで「いいね！」したツイートに別ページへのリンクが含まれている場合(※)に、そのページのリンク(※)をSlackに投稿する方法を紹介します。
 
-私自身、主に情報収集のためにTwitterを利用しているのですが、興味のある記事を見つけてもその場で読む時間がなかったり、有益な内容であれば後で何度か見返したいと思うことがあります。そこで、最近使い始めた個人Slackに情報を集約したいと思って実装しました。 ~~仕事でJavaScriptに触れたため勉強しようとしたが、特にやりたいことがなかったため互換性のあるGASを使ってみた~~
+私自身、主に情報収集のためにTwitterを利用しているのですが、興味のある記事を見つけてもその場で読む時間がなかったり、有益な内容であればあとで何度か見返したいと思うことがあります。そこで、最近使い始めた個人Slackに情報を集約したいと思って実装しました。 ~~仕事でJavaScriptに触れたため勉強しようとしたが、特にやりたいことがなかったため互換性のあるGASを使ってみた~~
 
 実装には以下を用いました。
+
 - [Twitter API](https://help.twitter.com/ja/rules-and-policies/twitter-api)：Twitterの情報にアクセスするため
 - [GoogleAppsScript](https://developers.google.com/gsuite/aspects/appsscript?hl=ja)(GAS)：「いいね！」したツイートの情報をSpreadsheetに取得してSlackに通知するため
 - [Slack Incoming Webhook](https://api.slack.com/messaging/webhooks)：GASからSlackにメッセージを送信するため
 
-※ツイートに別ページへのリンクが含まれているかに関わらず、slackに投稿されることがあります。~~後述するようにAPIから取得したデータで判断しているのですが、適切な判断項目を発見できていないのでご存知の方がいたらコメントにて教えていただけると幸いです~~
+※ツイートに別ページへのリンクが含まれているかにかかわらず、slackに投稿されることがあります。~~後述するようにAPIから取得したデータで判断しているのですが、適切な判断項目を発見できていないのでご存じの方がいたらコメントにて教えていただけると幸いです~~
 
-# 処理の大まかな流れ
+## 処理の大まかな流れ
+
 1. Twitterで「いいね！」をする
 2. GASでTwitter APIを利用して「いいね！」した最近のツイート100件を取得
 3. 取得したツイートの中でURLが含まれているものだけ、Spreadsheetに保存
 4. 保存されたツイートに含まれている別ページへのリンクをIncoming Webhookに渡す
 5. Incoming WebhookからSlackに投稿
 
-# 準備
-## GAS入門
+## 準備
+
+### GAS入門
+
 まず、GASで書いたスクリプトを実行できる環境を準備する必要があります。
 私はGASを書いたことがなかったため、以下のサイトで学習しました。
 　[Google Apps Script（GAS）入門](https://excel-ubara.com/apps_script1/)
 
 本記事の実装を再現するだけならこのサイトの[第3回](https://excel-ubara.com/apps_script1/GAS003.html)までを理解できていれば良いです。
 
-## Twitter APIのキーを取得
+### Twitter APIのキーを取得
+
 次に、Twitter APIを申請してAPIキーを取得する必要があります。
 私は以下の記事を参考に行いました。
 　[2020年度版 Twitter API利用申請の例文からAPIキーの取得まで詳しく解説](https://www.itti.jp/web-direction/how-to-apply-for-twitter-api/)
@@ -39,7 +44,8 @@ APIキー取得時にCallback URLsを設定しますが、ここには
 
 取得したAPIキーとAPIシークレットキーは実装時に必要となるため、再度参照できるようにしておきます。
 
-## TwitterWebServiceライブラリの導入
+### TwitterWebServiceライブラリの導入
+
 次に、GASからTwitter APIを利用するために必要な外部ライブラリ**[TwitterWebService](https://gist.github.com/M-Igashi/750ab08718687d11bff6322b8d6f5d90)**を導入します。
 GASにおけるライブラリについてと導入方法は以下の記事が分かりやすいです。
 　[Google Apps Script(GAS)入門 ライブラリとは？メリットと導入方法を解説](https://auto-worker.com/blog/?p=677)
@@ -47,15 +53,18 @@ GASにおけるライブラリについてと導入方法は以下の記事が�
 プロジェクトキーは`1rgo8rXsxi1DxI_5Xgo_t3irTw1Y5cxl2mGSkbozKsSXf2E_KBBPC3xTF`と入力します。
 バージョンは最新のものにします。（2020年5月現在の最新は2）
 
-## SlackにIncoming Webhookを追加
+### SlackにIncoming Webhookを追加
+
 最後に、GASからIncoming Webhookを介してSlackに投稿するため、SlackにIncoming Webhookを追加します。
-私はカスタムインテグレーションで設定してしまいましたが、[非推奨](https://api.slack.com/legacy/custom-integrations#migrating_to_apps)のようなので、以下の記事を参考に設定します。
+私はカスタムインテグレーションで設定してしまいましたが、[非推奨](https://api.slack.com/legacy/custom-integrations#migrating_to_apps)のようですので、以下の記事を参考に設定します。
 　[SlackのIncoming WebhookをカスタムインテグレーションではなくSlack Appから設定してみる](https://dev.classmethod.jp/articles/slack-incoming-webhook-by-slack-app/)
 
 Webhook URLは実装時に必要となるため、再度参照できるようにしておきます。
 
-# 実装
-## ツイートをSpreadsheetに取得
+## 実装
+
+### ツイートをSpreadsheetに取得
+
 まずは、GASでTwitter APIを利用して「いいね！」したツイートをSpreadsheetに取得します。
 この機能を実装したのが以下のスクリプトです。
 `*****API-key*****`と`*****API-secret-key*****`は自分で取得したキーに書き換えます。
@@ -200,18 +209,19 @@ function getArray(lastRow, sheet) {
 ※`authorize()`実行時にエラーが出力された場合、V8ランタイムが有効になっている可能性があるため、
 GASスクリプトエディタ→ツールバーの「実行」→「Chrome V8を搭載した新しいApps Scriptランタイムを無効にする」で無効にしてから実行します。
 
-上記のスクリプトを簡単に説明します。`getMyFavorites()`を実行すると「いいね！」した最新の100ツイートを取得して、各ツイートに対して別ページへのリンクが含まれているかを判断します。リンクが含まれている場合、`SearchUrl()`を呼び出して既にリンクがSpreadsheetに保存されているかを判断します。Spreadsheetに保存されていなければそのツイート情報を追記します。
+上記のスクリプトを簡単に説明します。`getMyFavorites()`を実行すると「いいね！」した最新の100ツイートを取得して、各ツイートに対して別ページへのリンクが含まれているかを判断します。リンクが含まれている場合、`SearchUrl()`を呼び出してすでにリンクがSpreadsheetに保存されているかを判断します。Spreadsheetに保存されていなければそのツイート情報を追記します。
 ~~`extractUrl()`は試行錯誤的にURLを抽出している感がすごいので、JavaScriptを学習したらもう少しきれいにしたいです。~~
 
 ```javascript
 
 var favTweetsJson = service.fetch("https://api.twitter.com/1.1/favorites/list.json?count=100");
 ```
-このメソッドの引数を変更することで様々なデータの取得などが可能です。
+このメソッドの引数を変更することでさまざまなデータの取得などが可能です。
 　[「いいね！」したツイートを取得するAPI](https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/get-favorites-list)
 　[API一覧](https://developer.twitter.com/en/docs/api-reference-index)
 
-## SpreadsheetからSlackに投稿
+### SpreadsheetからSlackに投稿
+
 次に、GASでSpreadsheetに追記された分のツイートに含まれるURLをSlack Incoming Webhookに渡します。
 `*****Webhook-URL*****`は自分で設定したURLに書き換えます。
 この機能を実装したのが以下のスクリプトです。
@@ -250,17 +260,18 @@ function postMessage(url){
       'unfurl_links': true, // URL先のページを展開
     })
   };
-  UrlFetchApp.fetch("https://hooks.slack.com/services/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", options);
+  UrlFetchApp.fetch("*****Webhook-URL*****", options);
  }
 ```
 
-上記のスクリプトを簡単に説明します。`postSheetChange()`を実行すると、前回実行時の最終行番号と今回実行時の最終行番号を比較して追記されたかを判断します。追記されていれば、その分だけ`postMessage(url)`を呼び出してURLをIncoming Webhookを介してSlackに投稿します。
+上記のスクリプトを簡単に説明します。`postSheetChange()`を実行すると、前回実行時の最終行番号と今回実行時の最終行番号を比較して追記されたかを判断します。追記されていれば、そのぶんだけ`postMessage(url)`を呼び出してURLをIncoming Webhookを介してSlackに投稿します。
 
 余談ですが、SlackではURLを投稿するとリンク先のページが展開されて閲覧性に優れていると感じていました。しかし、Incoming WebhookでURLを投稿すると展開されず困っていました。調べてみると、どうやら`'unfurl_links'`オプションを有効にする必要があるようでした。
 　[SlackのIncomming WebhookでURLが展開されない問題を解決する](https://funet.work/blog/146)
 
-# スクリプトを定期実行する
-GASでは、スクリプトを自動で実行するようにトリガーを設定することが出来ます。トリガーとは、「ある条件を満たしたときに、あるスクリプトを実行する」という命令のことです。つまり、1度トリガーを設定してしまえば、その後はトリガーの条件を満たす度に対象のスクリプトを自動で実行してくれるようになります。
+## スクリプトを定期実行する
+
+GASでは、スクリプトを自動で実行するようにトリガーを設定できます。トリガーとは、「ある条件を満たしたときに、あるスクリプトを実行する」という命令のことです。つまり、一度トリガーを設定してしまえば、その後はトリガーの条件を満たすたびに対象のスクリプトを自動で実行してくれます。
 トリガーの概要とその設定方法は、以下の記事が分かりやすいです。
 [【GAS】トリガーとは！トリガーの種類と使い方を解説](https://takakisan.com/gas-trigger-introduction/)
 
@@ -272,9 +283,10 @@ GASでは、スクリプトを自動で実行するようにトリガーを設�
 
 `postSheetChange関数`のトリガー設定
 <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/642820/0309ebcd-ea73-f7d0-cc01-8c828252be10.png" width=100%>
-`postSheetChange関数`はSpreadsheetに行が追加された時に呼び出されるように設定したかったのですが、GASを用いてSpreadsheetに書き込んだ場合はトリガーが反応しない（？）ため時間主導型に設定しました。
+`postSheetChange関数`はSpreadsheetに行が追加されたときに呼び出されるように設定したかったのですが、GASを用いてSpreadsheetに書き込んだ場合はトリガーが反応しない（？）ため時間主導型に設定しました。
 
-# 実装結果
+## 実装結果
+
 最後に、ここまでの手順に従って実装するとSpreadsheetに保存されるデータとSlackへ投稿されるURLの例を示します。
 
 まず、`getMyFavorites関数`がトリガーで呼び出されるとSpreadsheetに「いいね！」した別ページへのリンクを含むツイートの情報が保存されます。
@@ -287,7 +299,8 @@ GASでは、スクリプトを自動で実行するようにトリガーを設�
 
 次のトリガー実行時には、新たに「いいね！」したリンクを含むツイートだけをSlackに投稿して最終行番号を更新します。
 
-# 参考
+## 参考
+
 本記事で紹介した手法は主に以下2つの記事から着想を得ました。
 
 [GASで自分のツイートを取得してスプレッドシートに記録するやつ](https://crieit.net/posts/GAS)
