@@ -1,15 +1,6 @@
 {
    "rules": {
-        # "preset-ja-technical-writing": {
-        #     "sentence-length": {
-        #         max: 150
-        #     },
-        #     "no-exclamation-question-mark": false,
-        #     "ja-no-weak-phrase": false,
-        # },
         "preset-smarthr": {
-            "ja-no-mixed-period": false,
-            "@textlint-rule/no-unmatched-pair": false,
             "sentence-length": {
                 max: 150
             }
@@ -18,6 +9,15 @@
             "rulePaths": [
                 "dict/prh.yml",
                 "dict/WEB+DB_PRESS.yml"
+            ]
+        },
+   },
+    "filters": {
+        "allowlist": {
+            "allow": [
+                "/http(.+):embed:cite/",
+                "/.+👀/",
+                "/.+🐱/"
             ]
         }
     }

@@ -533,8 +533,8 @@ rules:
     expected: だいたい
   - pattern: 大抵
     expected: たいてい
-  - pattern: 大変
-    expected: たいへん
+  # - pattern: 大変
+  #   expected: たいへん
   - pattern: 沢山
     expected: たくさん
   - pattern:
@@ -552,13 +552,13 @@ rules:
     expected: 筆者
   - pattern: /辿([らりるれろっ])/
     expected: たど$1
-  - pattern: 例えば
-    expected: たとえば
-  - pattern:
-      - 譬え
-      - 喩え
-      - 例え
-    expected: たとえ
+  # - pattern: 例えば
+  #   expected: たとえば
+  # - pattern:
+  #     - 譬え
+  #     - 喩え
+  #     - 例え
+  #   expected: たとえ
   - pattern: たのし
     expected: 楽し
   - pattern: 度々
@@ -827,10 +827,10 @@ rules:
     expected: $1代わり
   - pattern: /代([らりるれろっ])/
     expected: 代わ$1
-  - pattern: 全て
-    expected: すべて
-  - pattern: 全く
-    expected: まったく
+  # - pattern: 全て
+  #   expected: すべて
+  # - pattern: 全く
+  #   expected: まったく
   - pattern: /([にも])関わらず|([にも])関らず|([にも])拘わらず|([にも])拘らず/
     expected: $1かかわらず
   - pattern: /埋めこ([まむめもん])|うめこ([まむめもん])/
@@ -1103,8 +1103,8 @@ rules:
     expected: 汚$1
   - pattern: /果([さしすせそ])/
     expected: 果た$1
-  - pattern: /([^排人])他([^ァ-ヶ社者人方])/
-    expected: $1ほか$2
+  # - pattern: /([^排人])他([^ァ-ヶ社者人方])/
+  #   expected: $1ほか$2
   - pattern: 後ほど
     expected: のちほど
   - pattern: うしろ
@@ -1443,12 +1443,12 @@ rules:
     expected: が経$1
   - pattern: /うめ([たつて])/
     expected: 埋め$1
-  - pattern:
-      - おすすめ
-      - お薦め
-      - お奨め
-      - オススメ
-    expected: お勧め
+  # - pattern:
+  #     - おすすめ
+  #     - お薦め
+  #     - お奨め
+  #     - オススメ
+  #   expected: お勧め
   - pattern:
       - てがけ
       - 手掛け

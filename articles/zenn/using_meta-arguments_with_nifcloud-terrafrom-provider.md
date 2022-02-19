@@ -33,7 +33,7 @@
 
 ### count
 
-`count`を使うと、値に設定した数分だけリソースを作成できます。たとえば、同じ構成のニフクラサーバーを2台作成したい場合を考えてみます。`count`を使わないと下記のように2つの`resource`ブロックを使う必要があります。
+`count`を使うと、値に設定した数分だけリソースを作成できます。例えば、同じ構成のニフクラサーバーを2台作成したい場合を考えてみます。`count`を使わないと下記のように2つの`resource`ブロックを使う必要があります。
 
 ```hcl
 resource "nifcloud_instance" "web1" {
@@ -136,7 +136,7 @@ resource "nifcloud_nas_instance" "example" {
 
 `resource`ブロックでは`for_each`で`spec`の要素分だけニフクラNASを作成するよう指定して、`identifier`と`allocated_storage`に[eachオブジェクト](https://www.terraform.io/docs/language/meta-arguments/for_each.html#the-each-object)でNAS名とディスク容量を指定しています。
 
-このように、`count`の場合は複数のリソースの差分をcountオブジェクトやlistを定義して組み合わせることになると思いますが、`for_each`では、listのほかにmapや文字列のsetを定義してその要素分だけリソースを作成できます。（listの場合は文字列のsetに変換する必要あり）
+このように、`count`の場合は複数のリソースの差分をcountオブジェクトやlistを定義して組み合わせることになると思いますが、`for_each`では、listの他にmapや文字列のsetを定義してその要素分だけリソースを作成できます。（listの場合は文字列のsetに変換する必要あり）
 
 ### lifecycle
 
@@ -192,7 +192,7 @@ nifcloud_dhcp_option.example: Creation complete after 1s [id=dopt-0r16fxwz]
 #### prevent_destroy
 
 `prevent_destroy`を設定されたリソースは、`terraform destoroy`コマンドで削除できなくなります。
-`prevent_destroy`の使い所は、ニフクラDBサーバーやKubernetes Service Hatobaのクラスターなど、復旧するのがたいへんなリソースに設定する場面かと思います。とはいえ本番環境のリソースは基本的にどれも削除されると困ると思うので、`terraform plan`の実行結果をよく読むことが大切です。
+`prevent_destroy`の使い所は、ニフクラDBサーバーやKubernetes Service Hatobaのクラスターなど、復旧するのが大変なリソースに設定する場面かと思います。とはいえ本番環境のリソースは基本的にどれも削除されると困ると思うので、`terraform plan`の実行結果をよく読むことが大切です。
 
 ここでは、Kubernetes Service Hatobaのクラスターに使った例を紹介します。
 
@@ -276,7 +276,7 @@ resource "nifcloud_db_instance" "example" {
 
 ニフクラDBサーバーを作成する場合、マスターユーザーのパスワードを設定する必要があります。tfファイルにパスワードを平文で書いておくのはよろしくないので、`ignore_changes`で`password`を指定します。こうすると、作成時には初期パスワードを書いておいて、後からパスワードを変更しても差分は無視されます。（`ignore_changes`の指定項目はカンマで区切ることで複数指定できます）
 
-このほかの適用例としては、`prevent_destroy`と似たような使い方になりますが、変更するとリソースが再作成されてしまう項目のみ`ignore_changes`にしておくことで、想定外の再作成を防ぐことも可能です。
+この他の適用例としては、`prevent_destroy`と似たような使い方になりますが、変更するとリソースが再作成されてしまう項目のみ`ignore_changes`にしておくことで、想定外の再作成を防ぐことも可能です。
 
 ニフクラDBサーバーでは、下記の項目を`ignore_changes`に設定することで設定変更では再作成が行われなくなります。
 
