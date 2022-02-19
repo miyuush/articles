@@ -17,9 +17,8 @@ jobs:
         run: >
           npm install --save-dev
           textlint
-          textlint-rule-preset-ja-technical-writing
-          textlint-rule-preset-ja-spacing
-          @proofdict/textlint-rule-proofdict
+          textlint-rule-preset-smarthr
+          textlint-rule-prh 
       
       - name: Install dependent module
         run: npm install

@@ -1,0 +1,10 @@
+imports:
+  - ../files/markdown.yml
+rules:
+  - expected: よい
+    pattern: /いい(?!ね)/
+    specs:
+      - from: いい天気
+        to: よい天気
+      - from: いいね
+        to: いいね

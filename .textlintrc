@@ -1,15 +1,22 @@
 {
    "rules": {
-        "preset-ja-technical-writing": {
+        # "preset-ja-technical-writing": {
+        #     "sentence-length": {
+        #         max: 150
+        #     },
+        #     "no-exclamation-question-mark": false,
+        #     "ja-no-weak-phrase": false,
+        # },
+        "preset-smarthr": {
             "sentence-length": {
                 max: 150
-            },
-            "no-exclamation-question-mark": false,
-            "ja-no-weak-phrase": false,
+            }
         },
-        "preset-ja-spacing": true,
-        "@proofdict/proofdict": {
-          "dictURL": "https://azu.github.io/proof-dictionary/"
+        "prh": {
+            "rulePaths": [
+                "dict/prh.yml",
+                "dict/WEB+DB_PRESS.yml"
+            ]
         }
     }
 } 
