@@ -1,5 +1,5 @@
 {
-   "rules": {
+    "rules": {
         "preset-smarthr": {
             "sentence-length": {
                 max: 150
