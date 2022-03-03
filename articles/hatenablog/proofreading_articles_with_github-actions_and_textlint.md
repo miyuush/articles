@@ -4,7 +4,7 @@
 
 　GitHub Actionsとtextlintについては、それぞれ下記のドキュメントが参考になると思います。  
 
-GitHub Actionsは、GitHub上で様々な操作に応じて任意の処理を実行できる機能です。
+GitHub Actionsは、GitHub上でさまざまな操作に応じて任意の処理を実行できる機能です。
 
 * [GitHub Actionsのドキュメント - GitHub Docs](https://docs.github.com/ja/actions)
 * [GitHubの新機能「GitHub Actions」で試すCI/CD](https://knowledge.sakura.ad.jp/23478/)
@@ -22,8 +22,7 @@ https://github.com/textlint/textlint/wiki/Collection-of-textlint-rule
 
 　今回は私の文章に馴染みそうなSmartHR用ルールプリセットをベースにします。
 
-* [よりよい文書を書くための校正ツール「textlint」のSmartHR用ルールプリセットを公開しました！｜SmartHRオープン社内報]
-(https://shanaiho.smarthr.co.jp/n/n881866630eda)
+* [よりよい文書を書くための校正ツール「textlint」のSmartHR用ルールプリセットを公開しました！｜SmartHRオープン社内報](https://shanaiho.smarthr.co.jp/n/n881866630eda)
 * [textlint-rule-preset-smarthr](https://github.com/kufu/textlint-rule-preset-smarthr)
 
 さらに、単語の表記ゆれをチェックする[textlint-rule-prh](https://github.com/textlint-rule/textlint-rule-prh)と特定の文字列や文章をチェックしないようにする[textlint-filter-rule-allowlist](https://github.com/textlint/textlint-filter-rule-allowlist)を使います。
@@ -57,8 +56,8 @@ textlintの設定ファイル`.textlintrc`は下記のように作成しまし�
 }
 ```
 
-　`preset-smarthr`にはデフォルトで多くのルールが含まれており、1文の最大文字数は120文字までとされています。私の感覚だと150文字くらいまで許容してほしいので、変更しています。他のルールはデフォルト値のままです。  
-　`prh`には表記ゆれをチェックする単語の辞書ファイルを指定しています。`preset-smarthr`でもデフォルトで一部の単語をチェックしてくれますが、物足りないと感じたので[WEB+DB PRESS用語統一ルール](https://gist.github.com/inao/f55e8232e150aee918b9)をprh形式にした[WEB+DB_PRESS.yml](https://github.com/prh/rules/blob/master/media/WEB%2BDB_PRESS.yml)を少し改良して使っています。公開されている辞書ファイルでカバーできない場合は、辞書ファイルを自分で作成することもできます。[こちら](https://github.com/prh/prh/blob/master/misc/prh.yml)を参考に作成すると良いでしょう。
+　`preset-smarthr`にはデフォルトで多くのルールが含まれており、一文の最大文字数は120文字までとされています。私の感覚だと150文字くらいまで許容してほしいので、変更しています。他のルールはデフォルト値のままです。  
+　`prh`には表記ゆれをチェックする単語の辞書ファイルを指定しています。`preset-smarthr`でもデフォルトで一部の単語をチェックしてくれますが、物足りないと感じたので[WEB+DB PRESS用語統一ルール](https://gist.github.com/inao/f55e8232e150aee918b9)をprh形式にした[WEB+DB_PRESS.yml](https://github.com/prh/rules/blob/master/media/WEB%2BDB_PRESS.yml)を少し改良して使っています。公開されている辞書ファイルでカバーできない場合は、辞書ファイルを自分で作成できます。[こちら](https://github.com/prh/prh/blob/master/misc/prh.yml)を参考に作成すると良いでしょう。
 　`allowlist`にはtextlintでチェックしてほしくない文章のパターンを正規表現で指定しています。(1)では、はてなブログでURLの埋め込みをした場合になぜか`[`が閉じられていないというエラーが出てしまうので無視するようにしています。(2)と(3)は、文末が絵文字で終わっている場合に句点で終わっていないというエラーが出てしまうので無視するようにしています。絵文字については、この方法だと絵文字ごとに許可ルールを追加しないといけないため、正規表現で書けるなら書きたいな～という気持ちです。
 
 ## GitHub Actionsの設定
@@ -99,11 +98,18 @@ jobs:
 
 1. リポジトリのファイルをチェックアウト
 2. Node.js環境のセットアップ
-3. textlintとプリセットルール等のインストール
+3. textlintとプリセットルールなどのインストール
 4. その他、依存パッケージのインストール
 5. `articles`ディレクトリ配下のMarkdown形式のファイルにtextlintを実行
 
 ## 実行
+
+　本記事の初稿をリポジトリにpushしたときのtextlint実行結果は下記になります。
+
+
+
+指摘箇所の行番号と指摘内容が表示されるので、指摘に従って修正する感じです。  
+`smarthr/prh-rules`と`prh`の二重に指摘されていたりするので、今後改善できればと思っています。
 
 ## おわりに
 
