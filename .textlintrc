@@ -15,7 +15,6 @@
     "filters": {
         "allowlist": {
             "allow": [
-                "/http(.+):embed:cite/",
                 "/.+👀/",
                 "/.+🐱/"
             ]
