@@ -6,7 +6,7 @@ COPY . .
 
 RUN npm install -g \
     textlint@12.1.0 \
-    textlint-rule-preset-smarthr@1.12.0 \
+    textlint-rule-preset-smarthr@1.11.3 \
     textlint-rule-prh \
     textlint-filter-rule-allowlist && npm install
 
