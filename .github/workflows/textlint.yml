@@ -16,7 +16,7 @@ jobs:
       - name: Install textlint
         run: >
           npm install --save-dev
-          textlint
+          textlint@12.1.0
           textlint-rule-preset-smarthr
           textlint-rule-prh 
           textlint-filter-rule-allowlist
