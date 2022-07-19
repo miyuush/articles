@@ -24,7 +24,7 @@
 
 ### フローの解説
 
-　まず、Google ChromeでTwitterアカウントのプロフィールから「いいね」のタブを開いて下にスクロールしていくと、Google ChromeのデベロッパーツールのElementsパネルから表示されるツイートのHTMLソースが入れ替わることが確認できます。
+　まず、Google ChromeでTwitterアカウントのプロフィールから「いいね」のタブを開いて下にスクロールしていくと、Google ChromeのデベロッパーツールのElementsパネルから表示されるツイートのHTMLソースが入れ替わることが確認できます。  
 　下記にHTMLソースの一部を示します。`<div data-testid="cellInnerDiv"`で始まる行が各ツイートのHTMLソースで、スクロール前には1行目に表示されているツイートがスクロール後には消えていることが分かります。そして、スクロール前に2行目以降に表示されていたツイートが1行上に繰り上がっています（`transform`の部分を見ると分かりやすい）。
 
 <figure class="figure-image figure-image-fotolife" title="スクロール前">[f:id:miyuush:20220718210902p:plain]<figcaption>スクロール前</figcaption></figure>
