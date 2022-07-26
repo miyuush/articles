@@ -6,6 +6,18 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        uses: hadolint/hadolint-action@v2.0.0
+        with:
+          dockerfile: Dockerfile
+
+            # - uses: hands-lab/dockle-action@v1
+            # with:
+            # image: textlint-articles
+
   textlint:
     runs-on: ubuntu-latest
     steps:
