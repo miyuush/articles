@@ -18,8 +18,8 @@ jobs:
           npm install --save-dev
           textlint@12.1.0
           textlint-rule-preset-smarthr@1.11.3
-          textlint-rule-prh 
-          textlint-filter-rule-allowlist
+          textlint-rule-prh@5.3.0 
+          textlint-filter-rule-allowlist@4.0.0
       
       - name: Install dependent module
         run: npm install
