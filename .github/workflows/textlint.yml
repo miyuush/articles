@@ -5,14 +5,14 @@ on:
     branches: [ main ]
 
 env:
-  TEST_TAG: textlint-articles:latest
+  TEST_TAG: textlint-articles:1.0.0
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   hadolint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: hadolint/hadolint-action@v2.0.0
         with:
@@ -39,7 +39,7 @@ jobs:
   textlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         # textlintを使用するためにnode.jsの設定を行う
       - uses: actions/setup-node@v2
 
