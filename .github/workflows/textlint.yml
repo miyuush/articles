@@ -4,9 +4,12 @@ on:
   push:
     branches: [ main ]
 
+env:
+  TEST_TAG: textlint-articles:1.0.0
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  docker-build:
+  hadolint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,9 +18,21 @@ jobs:
         with:
           dockerfile: Dockerfile
 
-            # - uses: hands-lab/dockle-action@v1
-            # with:
-            # image: textlint-articles
+  dockle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/setup-buildx-action@v2
+
+      - name: docker build
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          load: true
+          tags: ${{ env.TEST_TAG }}
+
+      - uses: hands-lab/dockle-action@v1
+        with:
+          image: ${{ env.TEST_TAG }}
 
   textlint:
     runs-on: ubuntu-latest
