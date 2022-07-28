@@ -29,7 +29,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          load: true
+            # load: true
           tags: ${{ env.TEST_TAG }}
 
       - uses: hands-lab/dockle-action@v1
