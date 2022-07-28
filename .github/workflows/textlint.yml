@@ -21,6 +21,9 @@ jobs:
   dockle:
     runs-on: ubuntu-latest
     steps:
+
+      - uses: actions/checkout@v3
+
       - uses: docker/setup-buildx-action@v2
 
       - name: docker build
