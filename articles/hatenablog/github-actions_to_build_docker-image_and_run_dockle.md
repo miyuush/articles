@@ -46,7 +46,7 @@ jobs:
 
 [https://github.com/miyuush/articles/blob/1768256f77e24a1386f368f1cb809d733a5b6c0e/.github/workflows/textlint.yml:embed:cite]
 
-　Dockleを実行するうえでの工夫点は2つあります。
+　Dockleを実行するうえでの工夫点は2つあります。  
 　1つ目は、`docker/build-push-action@v3`を使ってイメージをビルドしたあとに`load`オプションでDockerイメージとして出力するようにしている点です。  
 
 https://github.com/docker/build-push-action/blob/master/docs/advanced/export-docker.md  
