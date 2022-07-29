@@ -1783,7 +1783,7 @@ rules:
   #   pattern:  /キャラクター/
   - expected: キャッシュ
     pattern:
-      - /cache(?![^a-zA-Z\-])/
+      - /cache(?![^a-zA-Z])/
       - /Cache(?![^a-zA-Z\-])/
   - expected: クエリ文字列
     pattern:
@@ -2460,7 +2460,7 @@ rules:
   - expected: GitHub Enterprise
     pattern:  /GH:E|\bGHE\b|GitHub:E/
   - expected: $1GitHub$2
-    pattern:  /(?:([^/.])\bgithub)|(?:github\b([^/.]))/
+    pattern:  /(?:([^/.])\bgithub)|(?:github\b([^/.-]))/
   - expected: $1GitHub$2
     pattern:  /(?:([^/.])\bGithub)|(?:Github\b([^/.]))/
   - expected: Git
