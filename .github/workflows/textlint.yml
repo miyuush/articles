@@ -50,6 +50,8 @@ jobs:
       - uses: hands-lab/dockle-action@v1
         with:
           image: ${{ env.TEST_TAG }}
+          exit-code: '1'
+          exit-level: WARN
 
   textlint:
     runs-on: ubuntu-latest
