@@ -1,4 +1,4 @@
-　GitHub ActionsでDockerイメージをビルドして、コンテナイメージのセキュリティ診断ツール[Dockle](https://qiita.com/tomoyamachi/items/bb6ac5788bb734c91282)を実行するようにしました。
+　GitHub ActionsでDockerイメージをビルドして、コンテナイメージのセキュリティ診断ツール[Dockle](https://qiita.com/tomoyamachi/items/bb6ac5788bb734c91282)を実行するようにしました。  
 　GitHub Actionsの設定ファイルは下記になります（Docker BuildとDockleの実行部分のみ抜粋）。
 
 ```yaml
@@ -47,9 +47,9 @@ jobs:
 [https://github.com/miyuush/articles/blob/1768256f77e24a1386f368f1cb809d733a5b6c0e/.github/workflows/textlint.yml:embed:cite]
 
 　Dockleを実行するうえでの工夫点は2つあります。  
-　1つ目は、`docker/build-push-action@v3`を使ってイメージをビルドしたあとに`load`オプションでDockerイメージとして出力するようにしている点です。  
+　1つ目は、`docker/build-push-action@v3`を使ってイメージをビルドしたあとに`load`オプションでDockerイメージとして出力するようにしている点です。
 
-https://github.com/docker/build-push-action/blob/master/docs/advanced/export-docker.md  
+https://github.com/docker/build-push-action/blob/master/docs/advanced/export-docker.md
 
 　2つ目は、`hands-lab/dockle-action@v1`の`exit-code`オプションに`1`を設定している点です。これにより、DockleのチェックでWARNレベル以上の項目に引っかかればCIが失敗します。
 
