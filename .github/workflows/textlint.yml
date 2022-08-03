@@ -60,7 +60,7 @@ jobs:
 
       # textlintを使用するためにnode.jsの設定を行う
       - uses: actions/setup-node@v2
-      
+
       - uses: actions/cache@v3
         with:
           path: ~/.npm
@@ -73,11 +73,11 @@ jobs:
           npm install --save-dev
           textlint@12.1.0
           textlint-rule-preset-smarthr@1.11.3
-          textlint-rule-prh@5.3.0 
+          textlint-rule-prh@5.3.0
           textlint-filter-rule-allowlist@4.0.0
-      
+
       - name: Install dependent module
         run: npm install
-      
+
       - name: Execute textlint
         run: npx textlint "articles/**/*.md"
