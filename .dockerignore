@@ -1,8 +1,1 @@
-.cache/
-.git/
-.github/
-.gitignore
-articles/
-images/
 node_modules/
-README.md

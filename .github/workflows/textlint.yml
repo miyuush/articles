@@ -4,38 +4,80 @@ on:
   push:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  TEST_TAG: textlint-articles:1.0.0
+
 jobs:
-  docker-build:
+  hadolint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: hadolint/hadolint-action@v2.0.0
         with:
           dockerfile: Dockerfile
 
-            # - uses: hands-lab/dockle-action@v1
-            # with:
-            # image: textlint-articles
+  dockle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: docker/setup-buildx-action@v2
+
+      # See: https://github.com/docker/build-push-action/blob/master/docs/advanced/cache.md#local-cache
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Only docker build
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          load: true
+          tags: ${{ env.TEST_TAG }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - uses: hands-lab/dockle-action@v1
+        with:
+          image: ${{ env.TEST_TAG }}
+          exit-code: '1'
+          exit-level: WARN
 
   textlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        # textlintを使用するためにnode.jsの設定を行う
+      - uses: actions/checkout@v3
+
+      # textlintを使用するためにnode.jsの設定を行う
       - uses: actions/setup-node@v2
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install textlint
         run: >
           npm install --save-dev
           textlint@12.1.0
           textlint-rule-preset-smarthr@1.11.3
-          textlint-rule-prh@5.3.0 
+          textlint-rule-prh@5.3.0
           textlint-filter-rule-allowlist@4.0.0
-      
+
       - name: Install dependent module
         run: npm install
-      
+
       - name: Execute textlint
         run: npx textlint "articles/**/*.md"

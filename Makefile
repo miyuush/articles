@@ -4,5 +4,4 @@ build:
 
 .PHONY: lint
 lint:
-	docker container run --rm -v ${PWD}:/app textlint-articles:latest 
-
+	docker container run --rm -v ${PWD}:/app textlint-articles:latest
