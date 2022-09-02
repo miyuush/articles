@@ -23,7 +23,7 @@ curl -sS https://starship.rs/install.sh | sh
 
 https://github.com/starship/starship/blob/c40f0e7722dc4cf23dac4f19061d1342e4792002/install/install.sh#L142
 
-ならばと思い、以下のようにDockerfileに記載してdevcontainerを起動したのですがエラーになりました。
+なるほどと思い、以下のようにDockerfileに記載してdevcontainerを起動したのですがエラーになりました。
 
 ```dockerfile
 RUN curl -sS https://starship.rs/install.sh | sh --yes
@@ -48,7 +48,7 @@ Dockerfileではないですが、ファイル名的にdevcontainerにStarship�
 -s        -s オプションが指定された場合と、 オプションを全て処理した後に引き数が残っていなかった場合には、 コマンドは標準入力から読み込まれます。 このオプションを使うと、 対話的シェルを起動するときに 位置パラメータを設定できます。
 ```
 
-どうやら、`-- --yes`は`--yes`をオプションではなく引数として扱うという意味で、`-s -- --yes`とすることで引数`--yes`を標準入力として読み込むという意味だと思われます。これにより、Starshipのインストールスクリプトのオプションとして`--yes`を渡すことが出来ているという認識です（間違っていたらコメント頂けると嬉しいです）。Starshipの公式インストールワンライナーでは`bash`ではなく`sh`で実行するようになっていたのでそこだけ変更して実行すると上手くいきました（`sh`コマンドでもオプションの意味は同じです）。
+どうやら、`-- --yes`は`--yes`をオプションではなく引数として扱うという意味で、`-s -- --yes`とすることで引数`--yes`を標準入力として読み込むという意味だと思われます。これにより、Starshipのインストールスクリプトのオプションとして`--yes`を渡すことができているという認識です（間違っていたらコメントいただけるとうれしいです）。Starshipの公式インストールワンライナーでは`bash`ではなく`sh`で実行するようになっていたのでそこだけ変更して実行するとうまくいきました（`sh`コマンドでもオプションの意味は同じです）。
 
 ```dockerfile
 RUN curl -sS https://starship.rs/install.sh | sh -s -- --yes
@@ -56,5 +56,5 @@ RUN curl -sS https://starship.rs/install.sh | sh -s -- --yes
 
 ## 最後に
 
-　今回はDockerfileにStarshipのインストールを定義して不変的なイメージにしたかったので苦戦しましたが、devcontainerにStarshipをインストールして使うだけであれば、devcontainerの起動後にStarshipのインストールスクリプトを実行すれば問題ないです。また、devcontainerの[postCreateCommand](https://code.visualstudio.com/docs/remote/devcontainerjson-reference#_lifecycle-scripts)を使うとコンテナビルド時の初回のみインストールスクリプトが実行されるようになります。
+　今回はDockerfileにStarshipのインストールを定義して不変的なイメージにしたかったので苦戦しましたが、devcontainerにStarshipをインストールして使うだけであれば、devcontainerの起動後にStarshipのインストールスクリプトを実行すれば問題ないです。また、devcontainerの[postCreateCommand](https://code.visualstudio.com/docs/remote/devcontainerjson-reference#_lifecycle-scripts)を使うとコンテナビルド時の初回のみインストールスクリプトが実行されます。
 
