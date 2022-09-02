@@ -29,10 +29,32 @@ https://github.com/starship/starship/blob/c40f0e7722dc4cf23dac4f19061d1342e47920
 RUN curl -sS https://starship.rs/install.sh | sh --yes
 ```
 
-todo: エラーを再現してみる
+この指定ではインストールスクリプトではなく`sh`コマンドのオプションとして`-y`が渡されてしまうためです。
 
-このあとの構成
-- gistのコードを参考にしたら上手くいった
-  - https://gist.github.com/jarrodldavis/928c90036273a557848f4c73d5d4e701#file-vscode-devcontainer-sh-L35
-- `-s`オプションと`--`の説明
-- ちなみにpostcreatecommandでの実行でもインストールは上手くいった（初回起動時にyを入力する必要あり）
+```sh
+sh: 0: Illegal option -y
+```
+
+## 解決
+
+　適当に「devcontainer starship」で検索したら、以下のコードを発見しました。
+
+https://gist.github.com/jarrodldavis/928c90036273a557848f4c73d5d4e701#file-vscode-devcontainer-sh-L35
+
+Dockerfileではないですが、ファイル名的にdevcontainerにStarshipをインストールするスクリプトのようだったので、`bash -s -- --yes`の意味を調べてみました。`man bash`を見ると以下のことが書いてあります（一部抜粋）。
+
+```sh
+--        -- はオプションの終わりを示し、それ以降のオプション処理を行いません。 -- 以降の引き数は全て、ファイル名や引き数として扱われます。 引き数 - は -- と同じです。
+-s        -s オプションが指定された場合と、 オプションを全て処理した後に引き数が残っていなかった場合には、 コマンドは標準入力から読み込まれます。 このオプションを使うと、 対話的シェルを起動するときに 位置パラメータを設定できます。
+```
+
+どうやら、`-- --yes`は`--yes`をオプションではなく引数として扱うという意味で、`-s -- --yes`とすることで引数`--yes`を標準入力として読み込むという意味だと思われます。これにより、Starshipのインストールスクリプトのオプションとして`--yes`を渡すことが出来ているという認識です（間違っていたらコメント頂けると嬉しいです）。Starshipの公式インストールワンライナーでは`bash`ではなく`sh`で実行するようになっていたのでそこだけ変更して実行すると上手くいきました（`sh`コマンドでもオプションの意味は同じです）。
+
+```dockerfile
+RUN curl -sS https://starship.rs/install.sh | sh -s -- --yes
+```
+
+## 最後に
+
+　今回はDockerfileにStarshipのインストールを定義して不変的なイメージにしたかったので苦戦しましたが、devcontainerにStarshipをインストールして使うだけであれば、devcontainerの起動後にStarshipのインストールスクリプトを実行すれば問題ないです。また、devcontainerの[postCreateCommand](https://code.visualstudio.com/docs/remote/devcontainerjson-reference#_lifecycle-scripts)を使うとコンテナビルド時の初回のみインストールスクリプトが実行されるようになります。
+
